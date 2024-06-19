@@ -1,0 +1,22 @@
+name: Test All
+
+on:
+    workflow_dispatch:
+
+jobs:
+    Main:
+        strategy:
+            matrix:
+                format: [json, table, chart, csv]
+        runs-on: ubuntu-24.04
+        steps:
+          - name: "Checkout code"
+            uses: actions/checkout@v4
+          - name: "Update and Upgrade"
+            run: apt-get update && sudo apt-get upgrade
+          - name: "Install Dependencies"
+            run: |
+              apt-get install -y build-essential git
+          - name: Run Tests
+            run: |
+                make FORMATTER=${{ matrix.format }}
